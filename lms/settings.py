@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://ai-powered-learning-management-system.onrender.com']
+ALLOWED_HOSTS = ['ai-powered-learning-management-system.onrender.com']
 
 
 # Application definition
