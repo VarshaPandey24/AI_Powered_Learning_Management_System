@@ -1,0 +1,72 @@
+<!-- templates/courses/course_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="mb-3">{{ course.title }}</h1>
+            <p class="text-muted">Created by: {{ course.instructor.username }}</p>
+            <hr>
+            
+            {% if course.thumbnail %}
+                <img src="{{ course.thumbnail.url }}" class="img-fluid rounded mb-4" alt="{{ course.title }}">
+            {% endif %}
+            
+            <div class="lead">
+                {{ course.description|linebreaks }}
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Course Cost</h3>
+                    <h4 class="mb-3">₹{{ course.cost }}</h4>
+                    
+                    <!-- This section will change based on user role and enrollment -->
+                    {% if request.user == course.instructor %}
+                        <div class="d-grid">
+                            <a href="{% url 'video_add' course.id %}" class="btn btn-primary">Add New Video</a>
+                        </div>
+                    {% else %}
+                        {% if is_enrolled %}
+                            <div class="d-grid">
+                                <button class="btn btn-success" disabled>Already Enrolled</button>
+                            </div>
+                        {% else %}
+                             <div class="d-grid">
+        <a href="{% url 'enrollment_confirmation' course.id %}" class="btn btn-success">Enroll Now</a>
+    </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- Only show videos if user is the instructor OR is enrolled -->
+    {% if request.user == course.instructor or is_enrolled %}
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-3">Course Content</h2>
+            <div class="list-group">
+                {% for video in videos %}
+                    <a href="{{ video.video_file.url }}" target="_blank" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        {{ video.title }}
+                        <span class="badge bg-primary rounded-pill">Watch Video</span>
+                    </a>
+                {% empty %}
+                    <div class="alert alert-info">
+                        There are no videos in this course yet.
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

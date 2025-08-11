@@ -1,0 +1,33 @@
+<!-- templates/courses/enrollment_confirmation.html -->
+{% extends 'base.html' %}
+
+{% block title %}Confirm Enrollment{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title text-center">Confirm Your Enrollment</h2>
+                <hr>
+                <p class="lead">You are about to enroll in the following course:</p>
+                
+                <div class="alert alert-info">
+                    <h4 class="alert-heading">{{ course.title }}</h4>
+                    <p>Instructor: {{ course.instructor.username }}</p>
+                    <hr>
+                    <p class="mb-0"><strong>Price: ₹{{ course.cost }}</strong></p>
+                </div>
+
+                <form method="post" action="{% url 'process_enrollment' course.id %}">
+                    {% csrf_token %}
+                    <p class="text-muted small">By clicking "Confirm Enrollment", you agree to our terms of service. In a real application, this would proceed to payment.</p>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">Confirm Enrollment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
